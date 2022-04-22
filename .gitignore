@@ -63,4 +63,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Ignore local user settings
-/[Uu]serSettings/
+[Uu]serSettings/
