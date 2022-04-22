@@ -191,7 +191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6691424355587682231}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.87891, y: -1.0901954, z: 2.0671103}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3159160762116112419}
@@ -213,6 +213,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accelerationFactor: 50
   jumpForce: 1500
+  rotationSpeed: 100
+  maxVelocity: 20
+  maxTorque: 10
 --- !u!136 &1543144151872318970
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -236,10 +239,10 @@ Rigidbody:
   m_GameObject: {fileID: 6691424355587682231}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 0.05
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
+  m_Constraints: 112
+  m_CollisionDetection: 2
