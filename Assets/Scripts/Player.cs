@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Player : MonoBehaviour
 {
     private static Player instance;
-
     public static Player Instance
     {
         get
@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
             if (instance != null) return instance;
             // not assigned yet
             instance = FindObjectOfType<Player>();
-            if (instance == null) instance = new GameObject("Player", typeof(Player), typeof(Rigidbody), typeof(CapsuleCollider))
+            if (instance == null) instance = new GameObject("Player", typeof(Player))
                 .GetComponent<Player>();
             instance.Init();
             return instance;
@@ -20,13 +20,13 @@ public class Player : MonoBehaviour
     }
 
     private Rigidbody rb;
-    private CapsuleCollider coll;
+    private Collider coll;
     [SerializeField] private float movementSpeed = 5.0f;
     
     private void Init()
     {
         rb = GetComponent<Rigidbody>();
-        coll = GetComponent<CapsuleCollider>();
+        coll = GetComponent<Collider>();
     }
 
     public void Move(Vector3 movementVector)
