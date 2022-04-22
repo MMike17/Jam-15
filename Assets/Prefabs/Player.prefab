@@ -211,11 +211,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba7796af3322004fa4f95cc9f4bc0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationFactor: 50
-  jumpForce: 1500
-  rotationSpeed: 100
-  maxVelocity: 20
-  maxTorque: 10
+  accelerationFactor: 500
+  decelerationFactor: 750
+  jumpForce: 10
+  rotationSpeed: 50
+  maxVelocity: 1000
 --- !u!136 &1543144151872318970
 CapsuleCollider:
   m_ObjectHideFlags: 0

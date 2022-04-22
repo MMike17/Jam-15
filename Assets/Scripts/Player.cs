@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [SelectionBase]
@@ -23,9 +22,13 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private Collider coll;
     [SerializeField] private float accelerationFactor = 20.0f;
-    [SerializeField] private float jumpForce = 50.0f;
+	public float decelerationFactor;
+    [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float maxVelocity, maxTorque;
+    [SerializeField] private float maxVelocity;
+
+	float currentSpeed;
+	bool isGrounded;
     
     private void Init()
     {
@@ -33,19 +36,41 @@ public class Player : MonoBehaviour
         coll = GetComponent<Collider>();
     }
 
+	void Awake()
+	{
+		Init();
+	}
+
     public void Move(Vector3 movementVector, Vector2 rotationVector)
     {
-        var jump = movementVector.y;
+		// movement
+        float jump = movementVector.y;
         movementVector.y = 0;
-        rb.AddRelativeForce(movementVector * (accelerationFactor * Time.deltaTime), ForceMode.Impulse); // horizontal movement
-        rb.AddForce(Vector3.up * (jump * jumpForce * Time.deltaTime), ForceMode.Impulse); // jump
-        rb.AddRelativeTorque(Vector3.up * rotationVector.x * rotationSpeed * Time.deltaTime);
+
+		float targetSpeed = movementVector.magnitude > 0.1f ? maxVelocity : 0;
+		float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
+
+		currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
+
+		if(!isGrounded)
+			jump = 0;
+
+		// works very well for controller but is shit with keyboard
+		Vector3 finalSpeed = (transform.forward * movementVector.z + transform.right * movementVector.x) * currentSpeed * Time.deltaTime;
+		finalSpeed.y = rb.velocity.y;
+
+		rb.velocity = finalSpeed;
+
+		if(jump > 0)
+			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump
+
+		// rotation
+		transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = ClampV3(rb.velocity, maxVelocity);
-        rb.angularVelocity = ClampV3(rb.angularVelocity, maxTorque);
+		isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
     }
 
     private Vector3 ClampV3(Vector3 vector, float max)
