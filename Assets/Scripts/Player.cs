@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
 
     private Rigidbody rb;
     private Collider coll;
-    [SerializeField] private float movementSpeed = 5.0f;
+    [SerializeField] private float accelerationFactor = 20.0f;
+    [SerializeField] private float jumpForce = 50.0f;
     
     private void Init()
     {
@@ -29,8 +30,12 @@ public class Player : MonoBehaviour
         coll = GetComponent<Collider>();
     }
 
-    public void Move(Vector3 movementVector)
+    public void Move(Vector3 movementVector, Vector2 rotationVector)
     {
-        rb.AddForce(movementVector * movementSpeed * Time.deltaTime, ForceMode.Acceleration);
+        var jump = movementVector.y;
+        movementVector.y = 0;
+        rb.AddForce(movementVector * (accelerationFactor * Time.deltaTime), ForceMode.Impulse); // horizontal movement
+        rb.AddForce(Vector3.up * (jump * jumpForce * Time.deltaTime), ForceMode.Impulse); // jump
+        transform.Rotate(Vector3.up, rotationVector.x);
     }
 }
