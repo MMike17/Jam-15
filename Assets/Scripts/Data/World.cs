@@ -36,6 +36,6 @@ public static class World
 	public static void InitializeWorld()
 	{
 		currentWorld = WorldState.WorldA;
-		OnWorldSwitchedEvent(currentWorld);
+		OnWorldSwitchedEvent?.Invoke(currentWorld);
 	}
 }

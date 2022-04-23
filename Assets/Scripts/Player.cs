@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 [SelectionBase]
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
@@ -32,14 +33,18 @@ public class Player : MonoBehaviour
 	[Space]
 	public float normalSwitchCooldown;
 	public float damageSwitchCooldown;
+	[Space]
+	public Color interactOnColor;
+	public Color interactOffColor;
 
 	[Header("Scene references")]
     public Camera mainCamera;
 	public Transform[] raycastBones;
+	public Image interactionCursor;
 
     private Rigidbody rb;
     private Collider coll;
-
+	Switch currentSwitch;
     float currentSpeed;
 	float switchTimer;
     bool isGrounded;
@@ -70,6 +75,24 @@ public class Player : MonoBehaviour
 		// update switch timer
 		if(switchTimer > 0)
 			switchTimer -= Time.deltaTime;
+
+		currentSwitch = null;
+		interactionCursor.color = interactOffColor;
+
+		if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit,
+				interactMaxDistance))
+		{
+			currentSwitch = hit.collider.GetComponent<Switch>();
+
+			if (currentSwitch != null)
+				interactionCursor.color = interactOnColor;
+		}
+	}
+
+	public void Interact()
+	{
+		if(currentSwitch != null)
+			currentSwitch.Pull();
 	}
 
     public void SwitchWorld(bool takeDamage = false)
@@ -117,18 +140,6 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
-    }
-
-    public void Interact()
-    {
-        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit,
-                interactMaxDistance))
-        {
-            Switch switchComponent = hit.collider.GetComponent<Switch>();
-
-            if (switchComponent != null)
-                switchComponent.Pull();
-        }
     }
 
 	public void Catch(float animDuration, Vector3 enemyPos)
