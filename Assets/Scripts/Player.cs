@@ -7,27 +7,27 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Player : MonoBehaviour
 {
-    private static Player instance;
+	private static Player instance;
 
-    public static Player Instance
-    {
-        get
-        {
-            if (instance != null) return instance;
-            // not assigned yet
-            instance = FindObjectOfType<Player>();
-            instance.Init();
-            return instance;
-        }
-    }
+	public static Player Instance
+	{
+		get
+		{
+			if (instance != null) return instance;
+			// not assigned yet
+			instance = FindObjectOfType<Player>();
+			instance.Init();
+			return instance;
+		}
+	}
 
 	[Header("Settings")]
-    [SerializeField] private float accelerationFactor = 20.0f;
-    [SerializeField] private float jumpForce = 5.0f;
-    [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float maxVelocity;
-    public float decelerationFactor;
-    public float interactMaxDistance;
+	[SerializeField] private float accelerationFactor = 20.0f;
+	[SerializeField] private float jumpForce = 5.0f;
+	[SerializeField] private float rotationSpeed = 10f;
+	[SerializeField] private float maxVelocity;
+	public float decelerationFactor;
+	public float interactMaxDistance;
 	[Space]
 	public float normalSwitchCooldown;
 	public float damageSwitchCooldown;
@@ -36,53 +36,48 @@ public class Player : MonoBehaviour
 	public Color interactOffColor;
 
 	[Header("Scene references")]
-    public Camera mainCamera;
-
-    private CinemachineVirtualCamera[] vCams;
-    private CinemachineMixingCamera mixingCam;
 	public Transform[] raycastBones;
 	public Image interactionCursor;
+	public Animator anim;
+	public CameraFollowSystem cameraFollowSystem;
 
-    private Rigidbody rb;
-    private Collider coll;
+	Rigidbody rb;
+	Collider coll;
 	Switch currentSwitch;
-    float currentSpeed;
+	float currentSpeed;
 	float switchTimer;
-    bool isGrounded;
+	bool isGrounded;
 	bool inputBlocked;
 
-    void OnDrawGizmosSelected()
-    {
-        if (mainCamera != null)
-            Debug.DrawLine(mainCamera.transform.position,
-                mainCamera.transform.position + mainCamera.transform.forward * interactMaxDistance, Color.red);
-    }
+	void OnDrawGizmosSelected()
+	{
+		if (cameraFollowSystem != null && cameraFollowSystem.mainCamera != null)
+			Debug.DrawLine(cameraFollowSystem.mainCamera.transform.position,
+				cameraFollowSystem.mainCamera.transform.position + cameraFollowSystem.mainCamera.transform.forward * interactMaxDistance, Color.red);
+	}
 
-    private void Init()
-    {
-        rb = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
-        mainCamera = FindObjectOfType<Camera>();
-        mixingCam = FindObjectOfType<CinemachineMixingCamera>();
-        vCams = FindObjectsOfType<CinemachineVirtualCamera>();
+	private void Init()
+	{
+		rb = GetComponent<Rigidbody>();
+		coll = GetComponent<Collider>();
 		inputBlocked = false;
-    }
+	}
 
-    void Awake()
-    {
-        Init();
-    }
+	void Awake()
+	{
+		Init();
+	}
 
 	void Update()
 	{
 		// update switch timer
-		if(switchTimer > 0)
+		if (switchTimer > 0)
 			switchTimer -= Time.deltaTime;
 
 		currentSwitch = null;
 		interactionCursor.color = interactOffColor;
 
-		if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit,
+		if (Physics.Raycast(cameraFollowSystem.mainCamera.transform.position, cameraFollowSystem.mainCamera.transform.forward, out RaycastHit hit,
 				interactMaxDistance))
 		{
 			currentSwitch = hit.collider.GetComponent<Switch>();
@@ -90,15 +85,17 @@ public class Player : MonoBehaviour
 			if (currentSwitch != null)
 				interactionCursor.color = interactOnColor;
 		}
+
+		cameraFollowSystem.UpdateCamera(currentSpeed / maxVelocity);
 	}
 
 	public void Interact()
 	{
-		if(currentSwitch != null)
+		if (currentSwitch != null)
 			currentSwitch.Pull();
 	}
 
-    public void SwitchWorld(bool takeDamage = false)
+	public void SwitchWorld(bool takeDamage = false)
 	{
 		if (!takeDamage && (switchTimer > 0 || inputBlocked))
 			return;
@@ -106,53 +103,63 @@ public class Player : MonoBehaviour
 		if (takeDamage)
 			switchTimer = takeDamage ? damageSwitchCooldown : normalSwitchCooldown;
 
-        World.SwitchWorld();
-    }
+		World.SwitchWorld();
+	}
 
-    public void Move(Vector3 movementVector, Vector2 rotationVector)
-    {
-		if(inputBlocked)
+	public void Move(Vector3 movementVector, Vector2 rotationVector)
+	{
+		if (inputBlocked)
 			return;
 
-        // movement
-        float jump = movementVector.y;
-        movementVector.y = 0;
+		bool canMouvement = true;
+		anim.SetFloat("RightLeft", movementVector.x);
+		anim.SetFloat("FrontBack", movementVector.z);
 
-        float targetSpeed = movementVector.magnitude > 0.1f ? maxVelocity : 0;
-        float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
+		// movement
+		float jump = movementVector.y;
+		movementVector.y = 0;
 
-        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
-        
-        var velocityPercent = currentSpeed / maxVelocity;
-        mixingCam.m_Weight0 = Mathf.Lerp(0, 3, velocityPercent);
+		float targetSpeed = movementVector.magnitude > 0.1f ? maxVelocity : 0;
+		float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
 
-        if (!isGrounded)
-            jump = 0;
+		currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
 
-        // works very well for controller but is shit with keyboard
-        Vector3 finalSpeed = (transform.forward * movementVector.z + transform.right * movementVector.x) *
-                             currentSpeed * Time.deltaTime;
-        finalSpeed.y = rb.velocity.y;
+		if (!isGrounded)
+		{
+			jump = 0;
+			canMouvement = false;
+		}
 
-        rb.velocity = finalSpeed;
+		// works very well for controller but is shit with keyboard
+		Vector3 finalSpeed = (transform.forward * movementVector.z + transform.right * movementVector.x) * currentSpeed * Time.deltaTime;
+		finalSpeed.y = rb.velocity.y;
 
-        if (jump > 0)
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump
+		rb.velocity = finalSpeed;
 
-        // rotation
-        transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
-        foreach (var vCam in vCams)
-        {
-	        var transposer = vCam.GetCinemachineComponent<CinemachineTransposer>();
-	        var camOffset = (rotationVector.y * rotationSpeed * 0.5f * Time.deltaTime) + transposer.m_FollowOffset.y;
-	        transposer.m_FollowOffset.y = Mathf.Clamp(camOffset, 0, 6);
-        }
-    }
+		if (jump > 0)
+		{
+			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump	
+			canMouvement = false;
 
-    private void FixedUpdate()
-    {
-        isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
-    }
+			anim.Play("Jump");
+		}
+
+		if (!isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+			anim.Play("Jump");
+
+		// rotation
+		transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
+		cameraFollowSystem.SetXAngle(rotationVector.y * rotationSpeed);
+
+		if (canMouvement)
+			anim.Play("Movement");
+	}
+
+	private void FixedUpdate()
+	{
+		isGrounded = Physics.Raycast(transform.position, -Vector3.up, 0.001f);
+		Debug.DrawLine(transform.position, transform.position - Vector3.up * 0.001f, Color.black);
+	}
 
 	public void Catch(float animDuration, Vector3 enemyPos)
 	{
@@ -164,7 +171,7 @@ public class Player : MonoBehaviour
 		StartCoroutine(CatchTurn(animDuration, enemyPos));
 	}
 
-	public void Release ()
+	public void Release()
 	{
 		inputBlocked = false;
 		rb.isKinematic = false;
