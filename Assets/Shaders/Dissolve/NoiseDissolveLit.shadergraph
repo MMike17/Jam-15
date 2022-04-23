@@ -62,6 +62,9 @@
         },
         {
             "m_Id": "9fa686a3a7f34d41aba255c0b84c568a"
+        },
+        {
+            "m_Id": "3987549a75f043edb0afb19585356ab0"
         }
     ],
     "m_Keywords": [],
@@ -2014,6 +2017,24 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.BooleanShaderProperty",
+    "m_ObjectId": "3987549a75f043edb0afb19585356ab0",
+    "m_Guid": {
+        "m_GuidSerialized": "d1d7ca96-bece-4b61-8451-4dd1621a09dd"
+    },
+    "m_Name": "IsWorldA",
+    "m_DefaultReferenceName": "Boolean_3987549a75f043edb0afb19585356ab0",
+    "m_OverrideReferenceName": "_IsWorldA",
+    "m_GeneratePropertyBlock": true,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": false
 }
 
 {
