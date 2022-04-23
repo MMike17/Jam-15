@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     public Camera mainCamera;
 
     private CinemachineVirtualCamera[] vCams;
+    private CinemachineMixingCamera mixingCam;
 	public Transform[] raycastBones;
 	public Image interactionCursor;
 
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         mainCamera = FindObjectOfType<Camera>();
+        mixingCam = FindObjectOfType<CinemachineMixingCamera>();
         vCams = FindObjectsOfType<CinemachineVirtualCamera>();
 		inputBlocked = false;
     }
@@ -120,6 +122,9 @@ public class Player : MonoBehaviour
         float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
 
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
+        
+        var velocityPercent = currentSpeed / maxVelocity;
+        mixingCam.m_Weight0 = Mathf.Lerp(0, 3, velocityPercent);
 
         if (!isGrounded)
             jump = 0;

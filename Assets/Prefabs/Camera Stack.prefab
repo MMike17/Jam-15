@@ -99,9 +99,9 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.08
-  m_SoftZoneHeight: 0.08
-  m_BiasX: 0
+  m_SoftZoneWidth: 0
+  m_SoftZoneHeight: 0
+  m_BiasX: -0
   m_BiasY: 0
   m_CenterOnActivate: 1
 --- !u!114 &3029769724663075159
@@ -118,9 +118,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BindingMode: 1
   m_FollowOffset: {x: 0, y: 3, z: -15}
-  m_XDamping: 10
-  m_YDamping: 10
-  m_ZDamping: 10
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -136,6 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3029769724714360333}
   - component: {fileID: 3029769724714360330}
+  - component: {fileID: 1306760884}
   m_Layer: 0
   m_Name: CameraMix
   m_TagString: Untagged
@@ -185,6 +186,36 @@ MonoBehaviour:
   m_Weight5: 0.5
   m_Weight6: 0.5
   m_Weight7: 0.5
+--- !u!114 &1306760884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029769724714360331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  m_IgnoreTag: 
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 0.1
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.1
+  m_Strategy: 1
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0
+  m_Damping: 0
+  m_DampingWhenOccluded: 0
+  m_OptimalTargetDistance: 0
 --- !u!1 &3029769725048002809
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,8 +240,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3029769725048002809}
-  m_LocalRotation: {x: 0.098537646, y: 0.000000030570025, z: -0.0000000030270297, w: 0.99513334}
-  m_LocalPosition: {x: 1.5, y: 3.94, z: -20.6}
+  m_LocalRotation: {x: 0.09853762, y: -7.352745e-15, z: 6.667229e-16, w: 0.99513334}
+  m_LocalPosition: {x: 1.5, y: 4.13, z: -20.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3029769724663075156}
@@ -319,9 +350,9 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.08
-  m_SoftZoneHeight: 0.08
-  m_BiasX: 0
+  m_SoftZoneWidth: 0
+  m_SoftZoneHeight: 0
+  m_BiasX: -0
   m_BiasY: 0
   m_CenterOnActivate: 1
 --- !u!114 &3029769725072424418
@@ -337,10 +368,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 1, z: -10}
-  m_XDamping: 10
-  m_YDamping: 10
-  m_ZDamping: 10
+  m_FollowOffset: {x: 0, y: 1, z: -5}
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
   m_AngularDampingMode: 0
   m_PitchDamping: 0
   m_YawDamping: 0
@@ -370,8 +401,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3029769725241523513}
-  m_LocalRotation: {x: 0.0498137, y: -0.0000000021481275, z: 1.0713917e-10, w: 0.99875855}
-  m_LocalPosition: {x: 1.5, y: 1.94, z: -15.6}
+  m_LocalRotation: {x: 0.15920101, y: 0.000000029422234, z: -0.0000000047445603, w: 0.9872462}
+  m_LocalPosition: {x: 1.5, y: 2.13, z: -8.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3029769725072424419}
@@ -440,8 +471,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3029769725941573469}
-  m_LocalRotation: {x: 0.07924447, y: 0.000000016410445, z: -0.0000000017782482, w: 0.9968552}
-  m_LocalPosition: {x: 1.5, y: 2.94, z: -18.1}
+  m_LocalRotation: {x: 0.10899995, y: 0.000000008156352, z: -0.0000000035182715, w: 0.99404174}
+  m_LocalPosition: {x: 1.5, y: 3.13, z: -14.610001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6026834852793680906}
@@ -472,7 +503,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 42.673668
+  field of view: 35.615723
   orthographic: 0
   orthographic size: 5
   m_Depth: 0

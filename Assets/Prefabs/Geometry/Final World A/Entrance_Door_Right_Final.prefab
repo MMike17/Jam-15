@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3425394029969162789}
   - component: {fileID: 1740265418456649088}
   - component: {fileID: 4594337255695432010}
+  - component: {fileID: 3217533842030208156}
   m_Layer: 0
   m_Name: Entrance_Door_Right_Final
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3217533842030208156
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648856639708207263}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 690106047850165013, guid: 402a46aa3516bfa44ac4bffa4076f004, type: 3}
