@@ -33,7 +33,7 @@ public class WS_Chunk : WorldSpecific
         {
             timeElapsed += Time.deltaTime;
             var percent = timeElapsed / transitionLength;
-            if (!transitionToShow) percent = 1.0f - percent; 
+            if (transitionToShow) percent = 1.0f - percent; 
 
             foreach (var rend in renderers)
             {

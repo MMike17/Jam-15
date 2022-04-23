@@ -1,4 +1,5 @@
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +16,6 @@ public class Player : MonoBehaviour
             if (instance != null) return instance;
             // not assigned yet
             instance = FindObjectOfType<Player>();
-            if (instance == null)
-                instance = new GameObject("Player", typeof(Player))
-                    .GetComponent<Player>();
             instance.Init();
             return instance;
         }
@@ -39,6 +37,8 @@ public class Player : MonoBehaviour
 
 	[Header("Scene references")]
     public Camera mainCamera;
+
+    private CinemachineVirtualCamera[] vCams;
 	public Transform[] raycastBones;
 	public Image interactionCursor;
 
@@ -61,7 +61,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-
+        mainCamera = FindObjectOfType<Camera>();
+        vCams = FindObjectsOfType<CinemachineVirtualCamera>();
 		inputBlocked = false;
     }
 
@@ -135,6 +136,12 @@ public class Player : MonoBehaviour
 
         // rotation
         transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
+        foreach (var vCam in vCams)
+        {
+	        var transposer = vCam.GetCinemachineComponent<CinemachineTransposer>();
+	        var camOffset = (rotationVector.y * rotationSpeed * 0.5f * Time.deltaTime) + transposer.m_FollowOffset.y;
+	        transposer.m_FollowOffset.y = Mathf.Clamp(camOffset, 0, 6);
+        }
     }
 
     private void FixedUpdate()
