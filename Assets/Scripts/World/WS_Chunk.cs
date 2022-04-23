@@ -8,8 +8,8 @@ public class WS_Chunk : WorldSpecific
     public override void OnSwitchWorlds(World.WorldState newWorld)
     {
         var isNewWorldB = newWorld == World.WorldState.WorldB;
-        var prevWorldName = isNewWorldB ? "World B" : "World A";
-        var currWorldName = !isNewWorldB ? "World A" : "World B";
+        var prevWorldName = isNewWorldB ? "World A" : "World B";
+        var currWorldName = isNewWorldB ? "World B" : "World A";
 
         var prevWorld = transform.Find(prevWorldName);
         var currWorld = transform.Find(currWorldName);
