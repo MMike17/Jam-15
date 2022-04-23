@@ -1,12 +1,13 @@
 using System;
+using UnityEngine;
 
 /// <summary>World manager</summary>
 public static class World
 {
 	public enum WorldState
 	{
-		Normal,
-		Other
+		WorldA,
+		WorldB
 	}
 
 	static Action<WorldState> OnWorldSwitchedEvent;
@@ -26,8 +27,15 @@ public static class World
 
 	public static void SwitchWorld()
 	{
-		currentWorld = currentWorld == WorldState.Normal ? WorldState.Other : WorldState.Normal;
+		currentWorld = currentWorld == WorldState.WorldA ? WorldState.WorldB : WorldState.WorldA;
 
 		OnWorldSwitchedEvent?.Invoke(currentWorld);
+	}
+
+	[RuntimeInitializeOnLoadMethod]
+	public static void InitializeWorld()
+	{
+		currentWorld = WorldState.WorldA;
+		OnWorldSwitchedEvent(currentWorld);
 	}
 }

@@ -29,11 +29,11 @@ public class WS_Material : WorldSpecific
 	{
 		switch (state)
 		{
-			case WorldState.Normal:
+			case WorldState.WorldA:
 				renderer.materials = normalWorldMaterials;
 				break;
 
-			case WorldState.Other:
+			case WorldState.WorldB:
 				renderer.materials = otherWorldMaterials;
 				break;
 		}

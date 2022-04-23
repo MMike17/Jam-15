@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private static Player instance;
+
     public static Player Instance
     {
         get
@@ -12,85 +13,94 @@ public class Player : MonoBehaviour
             if (instance != null) return instance;
             // not assigned yet
             instance = FindObjectOfType<Player>();
-            if (instance == null) instance = new GameObject("Player", typeof(Player))
-                .GetComponent<Player>();
+            if (instance == null)
+                instance = new GameObject("Player", typeof(Player))
+                    .GetComponent<Player>();
             instance.Init();
             return instance;
         }
     }
 
-	public Camera mainCamera;
+    public Camera mainCamera;
     private Rigidbody rb;
     private Collider coll;
     [SerializeField] private float accelerationFactor = 20.0f;
-	public float decelerationFactor;
+    public float decelerationFactor;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxVelocity;
-	public float interactMaxDistance;
+    public float interactMaxDistance;
 
-	float currentSpeed;
-	bool isGrounded;
+    float currentSpeed;
+    bool isGrounded;
 
-	void OnDrawGizmosSelected ()
-	{
-		if(mainCamera != null)
-			Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + mainCamera.transform.forward * interactMaxDistance, Color.red);
-	}
-    
+    void OnDrawGizmosSelected()
+    {
+        if (mainCamera != null)
+            Debug.DrawLine(mainCamera.transform.position,
+                mainCamera.transform.position + mainCamera.transform.forward * interactMaxDistance, Color.red);
+    }
+
     private void Init()
     {
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
     }
 
-	void Awake()
-	{
-		Init();
-	}
+    void Awake()
+    {
+        Init();
+    }
+
+    public void SwitchWorld()
+    {
+        World.SwitchWorld();
+    }
 
     public void Move(Vector3 movementVector, Vector2 rotationVector)
     {
-		// movement
+        // movement
         float jump = movementVector.y;
         movementVector.y = 0;
 
-		float targetSpeed = movementVector.magnitude > 0.1f ? maxVelocity : 0;
-		float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
+        float targetSpeed = movementVector.magnitude > 0.1f ? maxVelocity : 0;
+        float step = movementVector.magnitude > 0.1f ? accelerationFactor : decelerationFactor;
 
-		currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, step * Time.deltaTime);
 
-		if(!isGrounded)
-			jump = 0;
+        if (!isGrounded)
+            jump = 0;
 
-		// works very well for controller but is shit with keyboard
-		Vector3 finalSpeed = (transform.forward * movementVector.z + transform.right * movementVector.x) * currentSpeed * Time.deltaTime;
-		finalSpeed.y = rb.velocity.y;
+        // works very well for controller but is shit with keyboard
+        Vector3 finalSpeed = (transform.forward * movementVector.z + transform.right * movementVector.x) *
+                             currentSpeed * Time.deltaTime;
+        finalSpeed.y = rb.velocity.y;
 
-		rb.velocity = finalSpeed;
+        rb.velocity = finalSpeed;
 
-		if(jump > 0)
-			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump
+        if (jump > 0)
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump
 
-		// rotation
-		transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
+        // rotation
+        transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-		isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
+        isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
     }
 
-	public void Interract ()
-	{
-		if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, interactMaxDistance))
-		{
-			Switch switchComponent = hit.collider.GetComponent<Switch>();
+    public void Interact()
+    {
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit,
+                interactMaxDistance))
+        {
+            Switch switchComponent = hit.collider.GetComponent<Switch>();
 
-			if(switchComponent != null)
-				switchComponent.Pull();
-		}
-	}
+            if (switchComponent != null)
+                switchComponent.Pull();
+        }
+    }
 
     // private Vector3 ClampV3(Vector3 vector, float max)
     // {
