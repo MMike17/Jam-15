@@ -98,8 +98,8 @@ public class CameraFollowSystem : MonoBehaviour
 			Vector3 pos = parent.forward * positionOffset.z + parent.up * positionOffset.y + parent.right * positionOffset.x;
 			Vector3 target = parent.forward * targetOffset.z + parent.up * targetOffset.y + parent.right * targetOffset.x;
 
-			Gizmos.DrawSphere(pos, 0.5f);
-			Gizmos.DrawSphere(target, 0.3f);
+			Gizmos.DrawSphere(pos, 0.4f);
+			Gizmos.DrawSphere(target, 0.2f);
 
 			Gizmos.DrawLine(pos, target);
 		}

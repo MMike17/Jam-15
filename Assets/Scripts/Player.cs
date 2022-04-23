@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private float jumpForce = 5.0f;
 	[SerializeField] private float rotationSpeed = 10f;
 	[SerializeField] private float maxVelocity;
+	public float fallDelay = 0.1f;
 	public float decelerationFactor;
 	public float interactMaxDistance;
 	[Space]
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
 	Switch currentSwitch;
 	float currentSpeed;
 	float switchTimer;
+	float fallTimer;
 	bool isGrounded;
 	bool inputBlocked;
 
@@ -140,12 +142,7 @@ public class Player : MonoBehaviour
 		{
 			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // jump	
 			canMouvement = false;
-
-			anim.Play("Jump");
 		}
-
-		if (!isGrounded && !anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
-			anim.Play("Jump");
 
 		// rotation
 		transform.Rotate(Vector3.up, rotationVector.x * rotationSpeed * Time.deltaTime);
@@ -159,6 +156,16 @@ public class Player : MonoBehaviour
 	{
 		isGrounded = Physics.Raycast(transform.position, -Vector3.up, 0.001f);
 		Debug.DrawLine(transform.position, transform.position - Vector3.up * 0.001f, Color.black);
+
+		if (isGrounded)
+			fallTimer = 0;
+		else
+		{
+			fallTimer += Time.deltaTime;
+
+			if (fallTimer > fallDelay && !anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+				anim.Play("Jump");
+		}
 	}
 
 	public void Catch(float animDuration, Vector3 enemyPos)
@@ -204,5 +211,13 @@ public class Player : MonoBehaviour
 			transform.rotation = targetRotation;
 			yield return null;
 		}
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		float normalY = other.GetContact(0).normal.y;
+
+		if (normalY > 0.9f || normalY < -0.9f)
+			anim.Play("Movement");
 	}
 }
