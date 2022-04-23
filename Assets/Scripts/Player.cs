@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [SelectionBase]
@@ -21,18 +22,28 @@ public class Player : MonoBehaviour
         }
     }
 
-    public Camera mainCamera;
-    private Rigidbody rb;
-    private Collider coll;
+	[Header("Settings")]
     [SerializeField] private float accelerationFactor = 20.0f;
-    public float decelerationFactor;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxVelocity;
+    public float decelerationFactor;
     public float interactMaxDistance;
+	[Space]
+	public float normalSwitchCooldown;
+	public float damageSwitchCooldown;
+
+	[Header("Scene references")]
+    public Camera mainCamera;
+	public Transform[] raycastBones;
+
+    private Rigidbody rb;
+    private Collider coll;
 
     float currentSpeed;
+	float switchTimer;
     bool isGrounded;
+	bool inputBlocked;
 
     void OnDrawGizmosSelected()
     {
@@ -45,6 +56,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+
+		inputBlocked = false;
     }
 
     void Awake()
@@ -52,13 +65,29 @@ public class Player : MonoBehaviour
         Init();
     }
 
-    public void SwitchWorld()
-    {
+	void Update()
+	{
+		// update switch timer
+		if(switchTimer > 0)
+			switchTimer -= Time.deltaTime;
+	}
+
+    public void SwitchWorld(bool takeDamage = false)
+	{
+		if (!takeDamage && (switchTimer > 0 || inputBlocked))
+			return;
+
+		if (takeDamage)
+			switchTimer = takeDamage ? damageSwitchCooldown : normalSwitchCooldown;
+
         World.SwitchWorld();
     }
 
     public void Move(Vector3 movementVector, Vector2 rotationVector)
     {
+		if(inputBlocked)
+			return;
+
         // movement
         float jump = movementVector.y;
         movementVector.y = 0;
@@ -102,12 +131,48 @@ public class Player : MonoBehaviour
         }
     }
 
-    // private Vector3 ClampV3(Vector3 vector, float max)
-    // {
-    //     vector.x = Mathf.Clamp(vector.x, -max, max);
-    //     vector.y = Mathf.Clamp(vector.y, -max, max);
-    //     vector.z = Mathf.Clamp(vector.z, -max, max);
+	public void Catch(float animDuration, Vector3 enemyPos)
+	{
+		inputBlocked = true;
+		rb.isKinematic = true;
+		rb.useGravity = false;
+		currentSpeed = 0;
 
-    //     return vector;
-    // }
+		StartCoroutine(CatchTurn(animDuration, enemyPos));
+	}
+
+	public void Release ()
+	{
+		inputBlocked = false;
+		rb.isKinematic = false;
+		rb.useGravity = true;
+
+		transform.SetParent(null);
+	}
+
+	IEnumerator CatchTurn(float animDuration, Vector3 enemyPos)
+	{
+		float animTurnPercent = 0.3f;
+		float turnDuration = animDuration * animTurnPercent;
+		Quaternion initialRotation = transform.rotation;
+
+		float turnTimer = 0;
+
+		while (turnTimer < animDuration)
+		{
+			turnTimer += Time.deltaTime;
+
+			Quaternion targetRotation = Quaternion.LookRotation(enemyPos - transform.position);
+			targetRotation.z = 0; // this is a test
+
+			if (turnTimer < turnDuration)
+			{
+				float percent = turnTimer / turnDuration;
+				targetRotation = Quaternion.Lerp(initialRotation, targetRotation, percent);
+			}
+
+			transform.rotation = targetRotation;
+			yield return null;
+		}
+	}
 }
