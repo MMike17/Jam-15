@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
         }
     }
 
+	public Camera mainCamera;
     private Rigidbody rb;
     private Collider coll;
     [SerializeField] private float accelerationFactor = 20.0f;
@@ -26,9 +27,16 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float maxVelocity;
+	public float interactMaxDistance;
 
 	float currentSpeed;
 	bool isGrounded;
+
+	void OnDrawGizmosSelected ()
+	{
+		if(mainCamera != null)
+			Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + mainCamera.transform.forward * interactMaxDistance, Color.red);
+	}
     
     private void Init()
     {
@@ -73,12 +81,23 @@ public class Player : MonoBehaviour
 		isGrounded = Physics.Raycast(transform.position, -Vector3.up, 2);
     }
 
-    private Vector3 ClampV3(Vector3 vector, float max)
-    {
-        vector.x = Mathf.Clamp(vector.x, -max, max);
-        vector.y = Mathf.Clamp(vector.y, -max, max);
-        vector.z = Mathf.Clamp(vector.z, -max, max);
+	public void Interract ()
+	{
+		if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, interactMaxDistance))
+		{
+			Switch switchComponent = hit.collider.GetComponent<Switch>();
 
-        return vector;
-    }
+			if(switchComponent != null)
+				switchComponent.Pull();
+		}
+	}
+
+    // private Vector3 ClampV3(Vector3 vector, float max)
+    // {
+    //     vector.x = Mathf.Clamp(vector.x, -max, max);
+    //     vector.y = Mathf.Clamp(vector.y, -max, max);
+    //     vector.z = Mathf.Clamp(vector.z, -max, max);
+
+    //     return vector;
+    // }
 }

@@ -13,6 +13,9 @@ public class InputSystem : MonoBehaviour
 		
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+		
+		if(Input.GetMouseButtonDown(0))
+			Player.Instance.Interract();
 
         Player.Instance.Move(movementVector, rotation);
     }
