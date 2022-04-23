@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_Environment
+  m_Name: MAT_Gate_A
   m_Shader: {fileID: -6465566751694194690, guid: a92ebb9abc40f1448a31ada9636f71a2, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -96,7 +96,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _IsWorldA: 0
+    - _IsWorldA: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OutlineDepthStrength: 0.005
@@ -120,13 +120,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.990566, g: 0.97211426, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &6302474006407979781
+--- !u!114 &692795885825772893
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
