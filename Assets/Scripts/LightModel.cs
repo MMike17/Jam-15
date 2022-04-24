@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Light : MonoBehaviour
+public class LightModel : MonoBehaviour
 {
 	[Header("Settings")]
 	[Range(0.1f, 20)]
@@ -10,6 +10,7 @@ public class Light : MonoBehaviour
 	public Transform lightHolderLeft;
 	public Transform lightHolderRight;
 	public Transform tube;
+	public new Light light;
 
 	void OnDrawGizmosSelected()
 	{
@@ -27,5 +28,8 @@ public class Light : MonoBehaviour
 
 		if (lightHolderRight != null)
 			lightHolderRight.position = transform.position + transform.right * size;
+
+		if (light != null)
+			light.range = size * 2 + 1;
 	}
 }
