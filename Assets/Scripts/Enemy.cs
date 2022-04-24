@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
 		agent.SetDestination(patrolPath.GetWaypoint(currentPathWaypointIndex));
 
 		if (agent.pathStatus == NavMeshPathStatus.PathComplete)
-			currentState = AIState.Idle;
+			currentPathWaypointIndex = patrolPath.WrapIndex(currentPathWaypointIndex++);
 	}
 
 	IEnumerator IdleAnimation()
