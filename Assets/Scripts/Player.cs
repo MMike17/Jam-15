@@ -1,5 +1,4 @@
 using System.Collections;
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -150,7 +149,10 @@ public class Player : MonoBehaviour
 		cameraFollowSystem.SetXAngle(rotationVector.y * rotationSpeed);
 
 		if (canMouvement)
+		{
 			anim.Play("Movement");
+			SoundSystem.PlaySound("Run");
+		}
 	}
 
 	private void FixedUpdate()
@@ -165,7 +167,10 @@ public class Player : MonoBehaviour
 			fallTimer += Time.deltaTime;
 
 			if (fallTimer > fallDelay && !anim.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+			{
 				anim.Play("Jump");
+				SoundSystem.StopSound("Run");
+			}
 		}
 	}
 
@@ -214,7 +219,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter(Collider other)
+	void OnTriggerEnter(Collider other)
 	{
 		endCanvas.SetActive(true);
 	}
