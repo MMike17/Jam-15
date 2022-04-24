@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 [SelectionBase]
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class Player : MonoBehaviour
+public class Player : WorldSpecific
 {
 	private static Player instance;
 
@@ -230,5 +230,18 @@ public class Player : MonoBehaviour
 
 		if (normalY > 0.9f || normalY < -0.9f)
 			anim.Play("Movement");
+	}
+
+	public override void OnSwitchWorlds(World.WorldState state)
+	{
+		rb.isKinematic = true;
+		StartCoroutine(StuckRoutine());
+	}
+
+	IEnumerator StuckRoutine()
+	{
+		yield return new WaitForSeconds(2);
+
+		rb.isKinematic = false;
 	}
 }
