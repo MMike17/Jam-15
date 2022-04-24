@@ -66,6 +66,7 @@ MonoBehaviour:
   - {fileID: 6610660699557715703}
   - {fileID: 7498674930722263679}
   interactionCursor: {fileID: 1067324074716445341}
+  endCanvas: {fileID: 6444957671788618744}
   anim: {fileID: 8784977736002761313}
   cameraFollowSystem: {fileID: 0}
 --- !u!136 &1543144151872318970
@@ -219,6 +220,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6444957671788618744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6394993894609581639, guid: cde7d44a677b0e747b9cf7906aa8c17e, type: 3}
+  m_PrefabInstance: {fileID: 130186350088246719}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5432974826528745777
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
 	[Header("Scene references")]
 	public Transform[] raycastBones;
 	public Image interactionCursor;
+	public GameObject endCanvas;
 	public Animator anim;
 	public CameraFollowSystem cameraFollowSystem;
 
@@ -211,6 +212,11 @@ public class Player : MonoBehaviour
 			transform.rotation = targetRotation;
 			yield return null;
 		}
+	}
+
+	void OnCollisionEnter(Collider other)
+	{
+		endCanvas.SetActive(true);
 	}
 
 	void OnCollisionEnter(Collision other)
