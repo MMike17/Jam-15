@@ -1,6 +1,7 @@
 using UnityEngine;
 
 /// <summary>Switch that can be activated by the player</summary>
+[RequireComponent(typeof(Animator))]
 public class Switch : MonoBehaviour
 {
 	[Header("Settings")]
@@ -9,7 +10,13 @@ public class Switch : MonoBehaviour
 	[Header("Scene references")]
 	public Door door;
 
+	Animator anim;
 	float timer;
+
+	void Awake()
+	{
+		anim = GetComponent<Animator>();
+	}
 
 	void Update()
 	{
@@ -17,11 +24,15 @@ public class Switch : MonoBehaviour
 			timer -= Time.deltaTime;
 
 		if (timer <= 0)
+		{
 			door.TryClose();
+			anim.Play("Close");
+		}
 	}
 
 	public void Pull()
 	{
+		anim.Play("Open");
 		door.TryOpen();
 		timer = openDuration;
 	}
