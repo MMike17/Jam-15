@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_Gate_A
+  m_Name: MAT_Table
   m_Shader: {fileID: -6465566751694194690, guid: a92ebb9abc40f1448a31ada9636f71a2, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -99,20 +99,20 @@ Material:
     - _IsWorldA: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OutlineDepthStrength: 0.005
-    - _OutlineDepthThreshold: 1.1
-    - _OutlineDepthTightening: 1
-    - _OutlineFarNormalEndDepth: 30
-    - _OutlineFarNormalStartDepth: 0
-    - _OutlineFarNormalThreshold: 1
-    - _OutlineNormalStrength: 1
-    - _OutlineNormalThreshold: 4
-    - _OutlineNormalTightening: 1
-    - _OutlineThickness: 0.01
+    - _OutlineDepthStrength: 0.212
+    - _OutlineDepthThreshold: 4.27
+    - _OutlineDepthTightening: 1.56
+    - _OutlineFarNormalEndDepth: 31.8
+    - _OutlineFarNormalStartDepth: 0.16
+    - _OutlineFarNormalThreshold: 1.15
+    - _OutlineNormalStrength: 2.18
+    - _OutlineNormalThreshold: 3.93
+    - _OutlineNormalTightening: 0.26
+    - _OutlineThickness: 0.00387
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.5
+    - _Smoothness: 0.201
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -120,13 +120,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.990566, g: 0.97211426, b: 0, a: 1}
+    - _BaseColor: {r: 0.7783019, g: 1, b: 0.9301339, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0.98225087, g: 0.9386859, b: 0, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &692795885825772893
+--- !u!114 &8567706313102835970
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
